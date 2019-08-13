@@ -17,6 +17,6 @@ xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS
 
 cp -r $HOME/Lilu/build/Debug/Lilu.kext $HOME/OpcodeEmulator
 
-xcodebuild -project ./OpcodeEmulator/OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES
+xcodebuild -project ./OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES
 
 
