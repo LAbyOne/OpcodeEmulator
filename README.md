@@ -11,7 +11,7 @@ to Compile
 
 git clone https://github.com/acidanthera/Lilu
 
-git clone https://github.com/HelmoHass/OpcodeEmulator
+git clone https://github.com/LAbyOne/OpcodeEmulator
 
 xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES
 
