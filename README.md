@@ -25,5 +25,5 @@ To Compile
 
 `cd OpcodeEmulator && git clone https://github.com/acidanthera/MacKernelSDK`
 
-xcodebuild -project ./OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES`
+`xcodebuild -project ./OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES`
 #
