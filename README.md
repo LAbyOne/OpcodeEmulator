@@ -11,7 +11,7 @@ Updated sources to new Lilu requirements.
 #
 To Compile
 #
-`Lilu`
+- Lilu
 
 `git clone https://github.com/acidanthera/Lilu`
 
@@ -19,7 +19,7 @@ To Compile
 
 `cp -r $HOME/Lilu/build/Debug/Lilu.kext $HOME/OpcodeEmulator`
 #
-`OpcodeEmulator`
+- OpcodeEmulator
 
 `git clone https://github.com/LAbyOne/OpcodeEmulator`
 
