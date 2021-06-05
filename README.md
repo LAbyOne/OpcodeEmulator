@@ -20,7 +20,9 @@ To Compile
 - OpcodeEmulator
 
 `git clone https://github.com/LAbyOne/OpcodeEmulator`
+
 `cp -r $HOME/Lilu/build/Debug/Lilu.kext $HOME/OpcodeEmulator`
+
 `cd OpcodeEmulator && git clone https://github.com/acidanthera/MacKernelSDK`
 
 `xcodebuild -project ./OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES`
