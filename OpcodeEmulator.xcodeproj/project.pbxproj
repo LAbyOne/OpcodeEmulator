@@ -53,13 +53,13 @@
 		22BEBDFB1FBD9F5900679F39 /* kern_user.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22BEBDEF1FBD9F5900679F39 /* kern_user.hpp */; };
 		22BEBDFC1FBD9F5900679F39 /* kern_util.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22BEBDF01FBD9F5900679F39 /* kern_util.hpp */; };
 		22BEBDFD1FBD9F5900679F39 /* plugin_start.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22BEBDF11FBD9F5900679F39 /* plugin_start.hpp */; };
-		22BEBE011FBD9F8E00679F39 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = 22BEBDFE1FBD9F8E00679F39 /* LegacyIOService.h */; };
-		22BEBE021FBD9F8E00679F39 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BEBDFF1FBD9F8E00679F39 /* libkmod.a */; };
 		22BEBE031FBD9F8E00679F39 /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22BEBE001FBD9F8E00679F39 /* plugin_start.cpp */; };
 		22C186122271430F00411952 /* vgather.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C186102271430F00411952 /* vgather.cpp */; };
 		22C186132271430F00411952 /* vgather.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22C186112271430F00411952 /* vgather.hpp */; };
 		22EF54812279DD5400152174 /* fma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22EF547F2279DD5400152174 /* fma.cpp */; };
 		22EF54822279DD5400152174 /* fma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22EF54802279DD5400152174 /* fma.hpp */; };
+		F80FB912266B93A10004FFAF /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F80FB911266B93A10004FFAF /* libkmod.a */; };
+		F8D36BF4266B99B700A07D2C /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = F8D36BF3266B99B600A07D2C /* LegacyIOService.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,13 +123,13 @@
 		22BEBDEF1FBD9F5900679F39 /* kern_user.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = kern_user.hpp; path = Lilu.kext/Contents/Resources/Headers/kern_user.hpp; sourceTree = "<group>"; };
 		22BEBDF01FBD9F5900679F39 /* kern_util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = kern_util.hpp; path = Lilu.kext/Contents/Resources/Headers/kern_util.hpp; sourceTree = "<group>"; };
 		22BEBDF11FBD9F5900679F39 /* plugin_start.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = plugin_start.hpp; path = Lilu.kext/Contents/Resources/Headers/plugin_start.hpp; sourceTree = "<group>"; };
-		22BEBDFE1FBD9F8E00679F39 /* LegacyIOService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyIOService.h; path = Lilu.kext/Contents/Resources/Library/LegacyIOService.h; sourceTree = "<group>"; };
-		22BEBDFF1FBD9F8E00679F39 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = Lilu.kext/Contents/Resources/Library/libkmod.a; sourceTree = "<group>"; };
 		22BEBE001FBD9F8E00679F39 /* plugin_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_start.cpp; path = Lilu.kext/Contents/Resources/Library/plugin_start.cpp; sourceTree = "<group>"; };
 		22C186102271430F00411952 /* vgather.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vgather.cpp; sourceTree = "<group>"; };
 		22C186112271430F00411952 /* vgather.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vgather.hpp; sourceTree = "<group>"; };
 		22EF547F2279DD5400152174 /* fma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fma.cpp; sourceTree = "<group>"; };
 		22EF54802279DD5400152174 /* fma.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fma.hpp; sourceTree = "<group>"; };
+		F80FB911266B93A10004FFAF /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
+		F8D36BF3266B99B600A07D2C /* LegacyIOService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LegacyIOService.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22BEBE021FBD9F8E00679F39 /* libkmod.a in Frameworks */,
+				F80FB912266B93A10004FFAF /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +189,7 @@
 				22BEBDE31FBD9E2300679F39 /* SDK */,
 				22BEBDCA1FBD997F00679F39 /* OpcodeEmulator */,
 				22BEBDC91FBD997F00679F39 /* Products */,
+				F80FB910266B93A00004FFAF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -227,8 +228,7 @@
 		22BEBDE41FBD9E8800679F39 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				22BEBDFE1FBD9F8E00679F39 /* LegacyIOService.h */,
-				22BEBDFF1FBD9F8E00679F39 /* libkmod.a */,
+				F8D36BF3266B99B600A07D2C /* LegacyIOService.h */,
 				22BEBE001FBD9F8E00679F39 /* plugin_start.cpp */,
 			);
 			name = Library;
@@ -253,6 +253,14 @@
 			name = Headers;
 			sourceTree = "<group>";
 		};
+		F80FB910266B93A00004FFAF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F80FB911266B93A10004FFAF /* libkmod.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -260,6 +268,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8D36BF4266B99B700A07D2C /* LegacyIOService.h in Headers */,
 				22BEBDF51FBD9F5900679F39 /* kern_disasm.hpp in Headers */,
 				22BEBDF31FBD9F5900679F39 /* kern_compression.hpp in Headers */,
 				2239B918225B421A00EBB2EC /* vsse2.hpp in Headers */,
@@ -276,7 +285,6 @@
 				224364E1226EDE1A00B3FD84 /* aesins.hpp in Headers */,
 				223ADE9B221A907C00B7E25B /* bmi.hpp in Headers */,
 				22BEBDFA1FBD9F5900679F39 /* kern_policy.hpp in Headers */,
-				22BEBE011FBD9F8E00679F39 /* LegacyIOService.h in Headers */,
 				223AED08226C412400F8F0DA /* half.hpp in Headers */,
 				22BEBDF71FBD9F5900679F39 /* kern_iokit.hpp in Headers */,
 				22BEBDFD1FBD9F5900679F39 /* plugin_start.hpp in Headers */,
@@ -510,6 +518,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CURRENT_PROJECT_VERSION = "$(MODULE_VERSION)";
 				DEPLOYMENT_POSTPROCESSING = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
 				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
@@ -522,15 +531,21 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Lilu.kext/Contents/Resources";
 				INFOPLIST_FILE = OpcodeEmulator/Info.plist;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
+				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Lilu.kext/Contents/Resources/Library",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MODULE_NAME = as.lvs1974.OpcodeEmulator;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.2.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				NEW_SETTING = "";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-static";
 				PRODUCT_BUNDLE_IDENTIFIER = as.lvs1974.OpcodeEmulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -565,9 +580,12 @@
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Lilu.kext/Contents/Resources";
 				INFOPLIST_FILE = OpcodeEmulator/Info.plist;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
+				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Lilu.kext/Contents/Resources/Library",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
@@ -575,6 +593,9 @@
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.2.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				NEW_SETTING = "";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-static";
 				PRODUCT_BUNDLE_IDENTIFIER = as.lvs1974.OpcodeEmulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
