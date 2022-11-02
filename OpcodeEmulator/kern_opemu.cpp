@@ -6,7 +6,7 @@
 //  Copyright © 2017年 Meowthra. All rights reserved.
 //  Made in Taiwan.
 
-#include <Library/LegacyIOService.h>
+#include <IOKit/IOService.h>
 
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_file.hpp>
@@ -27,9 +27,9 @@ void OPEMU::kernel_trap(x86_saved_state_t *state, uintptr_t *lo_spp) {
     type  = regs->isf.trapno;
 
     if (type == 6) {
-        callbackOPEMU->opemu_ktrap(state, lo_spp);
+       callbackOPEMU->opemu_ktrap(state, lo_spp);
     } else {
-        return callbackOPEMU->orgkerneltrap(state, lo_spp);
+        return FunctionCast(kernel_trap, callbackOPEMU->orgkerneltrap)(state, lo_spp);
     }
 }
 
@@ -58,12 +58,12 @@ void OPEMU::user_trap(x86_saved_state_t *saved_state) {
 
     if (type == 6) {
         callbackOPEMU->opemu_utrap(saved_state);
-        callbackOPEMU->thread_exception_return();
+        callbackOPEMU->orgthreadexceptionreturn();
         //opemu_utrap(saved_state);
         //exc = 2; //EXC_BAD_INSTRUCTION
         //code = 1; //EXC_I386_INVOP
     } else {
-        return callbackOPEMU->orgusertrap(saved_state);
+        return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(saved_state);
     }
 }
 
@@ -72,54 +72,53 @@ void OPEMU::processKernel(KernelPatcher &patcher) {
 
 	if (!(progressState & ProcessingState::KernelRouted)) {
 		//hook kernel_trap
-        auto method_address = patcher.solveSymbol(KernelPatcher::KernelID, "_kernel_trap");
-        if (method_address) {
+        orgkerneltrap = patcher.solveSymbol(KernelPatcher::KernelID, "_kernel_trap");
+        if (orgkerneltrap) {
             DBGLOG("OPEMU", "obtained _kernel_trap");
-            orgkerneltrap = reinterpret_cast<t_kernel_trap_callback>(patcher.routeFunction(method_address, reinterpret_cast<mach_vm_address_t>(kernel_trap), true));
-
-            if (patcher.getError() == KernelPatcher::Error::NoError) {
-                DBGLOG("OPEMU", "routed _kernel_trap");
-            } else {
-                SYSLOG("OPEMU", "failed to route _kernel_trap");
-            }
-        } else {
-            SYSLOG("OPEMU", "failed to resolve _kernel_trap");
-        }
-        
-        //hook user_trap
-        method_address = patcher.solveSymbol(KernelPatcher::KernelID, "_user_trap");
-        if (method_address) {
-            DBGLOG("OPEMU", "obtained _user_trap");
-            orgusertrap = reinterpret_cast<t_user_trap_callback>(patcher.routeFunction(method_address, reinterpret_cast<mach_vm_address_t>(user_trap), true));
             
-            if (patcher.getError() == KernelPatcher::Error::NoError) {
-                DBGLOG("OPEMU", "routed _user_trap");
-            } else {
-                SYSLOG("OPEMU", "failed to route _user_trap");
-            }
+            KernelPatcher::RouteRequest request("_kernel_trap", kernel_trap, orgkerneltrap);
+             patcher.routeMultipleLong(KernelPatcher::KernelID, &request, 1);
+            DBGLOG("OPEMU", "routed _kernel_trap");
+            
         } else {
-            SYSLOG("OPEMU", "failed to resolve _user_trap");
+            SYSLOG("OPEMU", "failed to route kernel_trap");
         }
+    
+             
 
+        //hook user_trap
+        orgusertrap = patcher.solveSymbol(KernelPatcher::KernelID, "_user_trap");
+        if (orgusertrap) {
+            DBGLOG("OPEMU", "obtained _user_trap");
+
+            KernelPatcher::RouteRequest request("_user_trap", user_trap, orgusertrap);
+             patcher.routeMultipleLong(KernelPatcher::KernelID, &request, 1);
+            DBGLOG("OPEMU", "routed _user_trap");
+        } else {
+            SYSLOG("OPEMU", "failed to route user_trap");
+        }
         //hook thread_exception_return
-        method_address = patcher.solveSymbol(KernelPatcher::KernelID, "_thread_exception_return");
-        if (method_address) {
+        orgthreadexceptionreturn = reinterpret_cast<t_thread_exception_return>(patcher.solveSymbol(KernelPatcher::KernelID, "_thread_exception_return"));
+        if (orgthreadexceptionreturn) {
             DBGLOG("OPEMU", "obtained _thread_exception_return");
-            thread_exception_return = reinterpret_cast<t_thread_exception_return>(method_address);
+        } else {
+            DBGLOG("OPEMU", "failed to resolve _thread_exception_return");
         }
         
         //hook unix_syscall
-        method_address = patcher.solveSymbol(KernelPatcher::KernelID, "_unix_syscall");
-        if (method_address) {
+        orgunixsyscall = reinterpret_cast<t_unix_syscall>(patcher.solveSymbol(KernelPatcher::KernelID, "_unix_syscall"));
+        if (orgunixsyscall) {
             DBGLOG("OPEMU", "obtained _unix_syscall");
-            unix_syscall = reinterpret_cast<t_unix_syscall>(method_address);
+        } else {
+            DBGLOG("OPEMU", "failed to resolve _unix_syscall");
         }
         
         //hook mach_call_munger
-        method_address = patcher.solveSymbol(KernelPatcher::KernelID, "_mach_call_munger");
-        if (method_address) {
+        orgmachcallmunger = reinterpret_cast<t_mach_call_munger>(patcher.solveSymbol(KernelPatcher::KernelID, "_mach_call_munger"));
+        if (orgmachcallmunger) {
             DBGLOG("OPEMU", "obtained _mach_call_munger");
-            mach_call_munger = reinterpret_cast<t_mach_call_munger>(method_address);
+        } else {
+            DBGLOG("OPEMU", "failed to resolve _mach_call_munger");
         }
         
         progressState |= ProcessingState::KernelRouted;
@@ -160,11 +159,11 @@ void OPEMU::opemu_ktrap(x86_saved_state_t *state, uintptr_t *lo_spp)
     
     // "lock" instruction return
     if (code_buffer[0]==0xF0) {
-        return callbackOPEMU->orgkerneltrap(state, lo_spp);
+        return FunctionCast(kernel_trap, callbackOPEMU->orgkerneltrap)(state, lo_spp);
     }
     // "ud2" instruction return
     if ( (code_buffer[0]==0x0F) && (code_buffer[1]==0x0B) ) {
-        return callbackOPEMU->orgkerneltrap(state, lo_spp);
+        return FunctionCast(kernel_trap, callbackOPEMU->orgkerneltrap)(state, lo_spp);
     }
 
     //Enable REX Opcode Emulation
@@ -181,7 +180,7 @@ void OPEMU::opemu_ktrap(x86_saved_state_t *state, uintptr_t *lo_spp)
     if (!bytes_skip)
     {
         printf("OpcodeEmulator invalid kernel opcode (64-bit): %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\n", code_buffer[0], code_buffer[1], code_buffer[2], code_buffer[3], code_buffer[4], code_buffer[5], code_buffer[6], code_buffer[7], code_buffer[8], code_buffer[9]);
-        return callbackOPEMU->orgkerneltrap(state, lo_spp);
+        return FunctionCast(kernel_trap, callbackOPEMU->orgkerneltrap)(state, lo_spp);
     }
 }
 
@@ -201,11 +200,11 @@ void OPEMU::opemu_utrap(x86_saved_state_t *state)
         
         // "lock" instruction return
         if (code_buffer[0]==0xF0) {
-            return callbackOPEMU->orgusertrap(state);
+            return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(state);
         }
         // "ud2" instruction return
         if ( (code_buffer[0]==0x0F) && (code_buffer[1]==0x0B) ) {
-            return callbackOPEMU->orgusertrap(state);
+            return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(state);
         }
 
         //Enable REX Opcode Emulation
@@ -222,7 +221,7 @@ void OPEMU::opemu_utrap(x86_saved_state_t *state)
         if (!bytes_skip)
         {
             printf("OpcodeEmulator invalid user opcode (64-bit): %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\n", code_buffer[0], code_buffer[1], code_buffer[2], code_buffer[3], code_buffer[4], code_buffer[5], code_buffer[6], code_buffer[7], code_buffer[8], code_buffer[9]);
-            return callbackOPEMU->orgusertrap(state);
+            return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(state);
         }
     }
     else
@@ -237,11 +236,11 @@ void OPEMU::opemu_utrap(x86_saved_state_t *state)
         
         // "lock" instruction return
         if (code_buffer[0]==0xF0) {
-            return callbackOPEMU->orgusertrap(state);
+            return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(state);
         }
         // "ud2" instruction return
         if ( (code_buffer[0]==0x0F) && (code_buffer[1]==0x0B) ) {
-            return callbackOPEMU->orgusertrap(state);
+            return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(state);
         }
 
         // sysenter/sysexit for AMD Machines 32-bit Mode
@@ -251,9 +250,9 @@ void OPEMU::opemu_utrap(x86_saved_state_t *state)
             regs->uesp = regs->ecx;
             
             if ((signed int)regs->eax < 0) {
-                callbackOPEMU->mach_call_munger(state);
+                callbackOPEMU->orgmachcallmunger(state);
             } else {
-                callbackOPEMU->unix_syscall(state);
+                callbackOPEMU->orgunixsyscall(state);
             }
             return;
         }
@@ -278,7 +277,7 @@ void OPEMU::opemu_utrap(x86_saved_state_t *state)
         if (!bytes_skip)
         {
             printf("OpcodeEmulator invalid user opcode (32-bit): %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\n", code_buffer[0], code_buffer[1], code_buffer[2], code_buffer[3], code_buffer[4], code_buffer[5], code_buffer[6], code_buffer[7], code_buffer[8], code_buffer[9]);
-            return callbackOPEMU->orgusertrap(state);
+            return FunctionCast(user_trap, callbackOPEMU->orgusertrap)(state);
         }
     }
 }

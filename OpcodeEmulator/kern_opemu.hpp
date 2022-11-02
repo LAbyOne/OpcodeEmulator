@@ -132,27 +132,23 @@ private:
 	 */
     void processKernel(KernelPatcher &patcher);
 
-    using t_kernel_trap_callback = void (*) (x86_saved_state_t *state, uintptr_t *lo_spp);
-    using t_user_trap_callback = void (*) (x86_saved_state_t *saved_state);
-
     static void kernel_trap(x86_saved_state_t *state, uintptr_t *lo_spp);
     static void user_trap(x86_saved_state_t *saved_state);
     
     void opemu_ktrap(x86_saved_state_t *state, uintptr_t *lo_spp);
     void opemu_utrap(x86_saved_state_t *state);
     
-    t_kernel_trap_callback    orgkerneltrap {nullptr};
-    t_user_trap_callback    orgusertrap {nullptr};
-
+    mach_vm_address_t    orgkerneltrap {};
+    mach_vm_address_t    orgusertrap {};
+    
     using t_thread_exception_return = void (*) (void);
-    t_thread_exception_return thread_exception_return {nullptr};
+    t_thread_exception_return orgthreadexceptionreturn {nullptr};
 
     using t_mach_call_munger = void (*) (x86_saved_state_t *state);
-    t_mach_call_munger mach_call_munger {nullptr};
+    t_mach_call_munger orgmachcallmunger {nullptr};
 
     using t_unix_syscall = void (*) (x86_saved_state_t *state);
-    t_unix_syscall unix_syscall {nullptr};
-
+    t_unix_syscall orgunixsyscall {nullptr};
     
     struct ProcessingState {
         enum {
