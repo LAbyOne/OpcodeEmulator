@@ -1,22 +1,33 @@
-OpcodeEmulator by Meowthra
+Original OpcodeEmulator Project by Meowthra
 
 Intel Haswell Pentium / Celeron Series Or older processor expansion instruction set Emulation
 
 https://www.insanelymac.com/forum/topic/329704-opcode-emulator-opemu-plug-in-project/
 
-
 requires Lilu plugin
 
-to Compile
+#
+# Updated source to be compiled using new acidanthera Lilu requirements.
+#
+To Compile
+- Lilu 
+- OpcodeEmulator
+ 
+Copy/Paste the whole command into your Terminal window.
+#
+`git clone https://github.com/acidanthera/Lilu`
 
-git clone https://github.com/acidanthera/Lilu
+`cd Lilu && git clone https://github.com/acidanthera/MacKernelSDK`
 
-git clone https://github.com/HelmoHass/OpcodeEmulator
+`xcodebuild -project ./Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES`
 
-xcodebuild -project ./Lilu/Lilu.xcodeproj -configuration Debug clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES
+`cd ..`
 
-cp -r $HOME/Lilu/build/Debug/Lilu.kext $HOME/OpcodeEmulator
+`git clone https://github.com/LAbyOne/OpcodeEmulator`
 
-xcodebuild -project ./OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES
+`cp -r $HOME/Lilu/build/Debug/Lilu.kext $HOME/OpcodeEmulator`
 
+`cp -Rf $HOME/Lilu/MacKernelSDK` $HOME/OpcodeEmulator
 
+`xcodebuild -project ./OpcodeEmulator/OpcodeEmulator.xcodeproj -configuration Release clean build ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES`
+#
